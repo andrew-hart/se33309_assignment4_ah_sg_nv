@@ -1,0 +1,251 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand">Pharma.js</a>
+    <button type="button" class="btn btn-default navbar-btn" (click)="makeVisible(0)">Home</button>
+    <button type="button" class="btn btn-default navbar-btn" (click)="makeVisible(1)">Insert Drug Order</button>
+    <button type="button" class="btn btn-default navbar-btn" (click)="makeVisible(2)">Prescription Records</button>
+    <button type="button" class="btn btn-default navbar-btn" (click)="makeVisible(3)">Supplier Inventory</button>
+    <button type="button" class="btn btn-default navbar-btn" (click)="makeVisible(4)">Allergy Check</button>
+    <button type="button" class="btn btn-default navbar-btn" (click)="makeVisible(5)">Drug Inventory</button>
+    <button type="button" class="btn btn-default navbar-btn" (click)="makeVisible(6)">Doctor Performance</button>  
+  </div>
+</nav>
+
+
+<div class="container center border">
+  <div class="row">
+    <div class="col-xs-12">
+      <br><br><br>
+      <!-- Home Page -->
+      <div *ngIf="isVisible[0]">
+        <h3>Welcome to Pharma.js</h3>
+        <br>
+        <h5>Please use the navigation bar above to access the functionality.</h5>
+      </div>
+      
+      <!------------------------Insert Drug Order------------------------------>
+      <div *ngIf="isVisible[1]">
+        <br/>
+        
+         <form (ngSubmit)="onInsertDrugOrder(f)" #f="ngForm" class="form-border">
+            <h3>Insert Drug Order</h3>
+            <br/>
+            <div class="form-group">
+              <!-- Drug Name -->
+              <label for="drugName">Drug Name: </label>
+              <input type="text" class="form-control" id="drugName" placeholder="Drug Name ..." required name="drugName" ngModel #drugName="ngModel"><br/>
+              <!-- Quantity -->
+              <label for="quantity"> Quantity: </label>
+              <input type="number" class="form-control" id="quantity" placeholder="Qty.." required name="quantity" ngModel #quantity="ngModel"><br/>
+              <!-- Supplier Name -->
+              <label for="supplierName">Supplier Name: </label>
+              <input type="text" class="form-control" id="supplierName" placeholder="Supplier..." required  name="supplierName" ngModel #supplierName="ngModel"><br/>
+              <!-- Submit Button -->
+              <button type="submit" class="btn-primary btn"  [disabled]="!f.valid">Submit</button>
+              <br/>
+              <br/>
+              <div *ngIf="insertDrugMessage">{{insertDrugMessage}}</div>
+            </div>
+        </form>
+      </div>
+      
+      <!----------------- Perscription Records -------------------------------->
+      <div *ngIf="isVisible[2]">
+          <br/>
+          <form (ngSubmit)="onPrescriptionRecords(f)" #f="ngForm" class="form-border">
+            <h3>Prescription Records</h3>
+            <br/>
+            <div class="form-group">
+              <!-- Drug Name -->
+              <label for="drugName">Please specify the drug you want to find prescription records for:</label>
+              <input type="text" class="form-control" id="drugName" placeholder="Drug Name ..." required  name="drugName" ngModel #drugName="ngModel"><br/>
+              <!-- Submit Button -->
+              <button type="submit" class="btn-primary btn"  [disabled]="!f.valid">Find Records</button>
+              <br/>
+              <p>{{ insertDrugMessage }}</p>
+            </div>
+          </form>
+            <!-- Display the Prescription records -->
+            <br/><br/>
+            <h4>Prescription Records</h4>
+            <br/>
+           
+              <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">First Name</th>
+                      <th scope="col">Last Name</th>
+                      <th scope="col">Unit Quantity</th>
+                      <th scope="col">Start Date</th>
+                      <th scope="col">End Date</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    <div *ngFor="let prescriptionRecord of presciptionRecords ; let i = index" [attr.data-index]="i">
+                      <tr>
+                        <th scope="row">{{ i }}</th>
+                        <td>{{ prescriptionRecord.fName }}</td>
+                        <td>{{ prescriptionRecord.lName }}</td>
+                        <td>{{ prescriptionRecord.unitQuantity }}</td>
+                        <td>{{ prescriptionRecord.startDate }}</td>
+                        <td>{{ prescriptionRecord.endDate }}</td>
+                      </tr>
+                    </div>
+                  </tbody>
+                </table>
+          </div>
+
+      <!------------------- Supplier Inventory -------------------------------->
+      <div *ngIf="isVisible[3]">
+          <br/>
+          <form (ngSubmit)="onSupplierInventory(f)" #f="ngForm" class="form-border">
+            <h3>Supplier Inventory</h3>
+            <br/>
+            <div class="form-group">
+              <!-- Supplier Name -->
+              <label for="supplierName">Please specify the the supplier you want to find inventory for:</label>
+              <input type="text" class="form-control" id="supplierName" placeholder="Supplier Name ..." required  name="supplierName" ngModel #supplierName="ngModel"><br/>
+              <!-- Submit Button -->
+              <button type="submit" class="btn-primary btn"  [disabled]="!f.valid">Find Inventory</button>
+              <br/>
+            </div>
+          </form>
+            <!-- Display the Inventory records -->
+            <br/><br/>
+            <h4>Inventory: </h4>
+            <br/>
+            
+              <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Drug Name</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    <div *ngFor="let inventory of supplierInventory; let i = index" [attr.data-index]="i">
+                      <tr>
+                        <th scope="row">{{ i }}</th>
+                        <td>{{ inventory.drugName }}</td>
+                      </tr>
+                    </div>
+                  </tbody>
+                </table>
+          </div>
+      
+      <!----------------------------- Allergy Check --------------------------->
+      <div *ngIf="isVisible[4]">
+        <br/>
+          <form (ngSubmit)="onAllergyCheck(f)" #f="ngForm" class="form-border">
+            <h3>Allergy Check</h3>
+            <br/>
+            <strong>Check Allergy:</strong><br/><br/>
+            <div class="form-group">
+              <!-- Patient Name -->
+              <label for="patientName">Please specify the patients first name:</label>
+              <input type="text" class="form-control" id="patientName" placeholder="Name..." required  name="name" ngModel #name="ngModel"><br/>
+              <!-- Submit Button -->
+              <button type="submit" class="btn-primary btn"  [disabled]="!f.valid">Find</button>
+              <br/>
+            </div>
+          </form>
+            <!-- Display the Allergy records -->
+            <br/><br/>
+            <h4>Allergy Records</h4>
+            <br/>
+            
+              <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">First Name</th>
+                      <th scope="col">Last Name</th>
+                      <th scope="col">Drug</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    <div *ngFor="let allergy of allergyRecord; let i = index" [attr.data-index]="i">
+                      <tr>
+                        <th scope="row">{{ i }}</th>
+                        <td>{{ allergy.fName }}</td>
+                        <td>{{ allergy.lName }}</td>
+                        <td>{{ allergy.drugName }}</td>
+                      </tr>
+                    </div>  
+                  </tbody>
+                </table>
+          </div> 
+      </div>
+
+      <!-- Drug Inventory -->
+      <div *ngIf="isVisible[5]">
+       <br/><br/><br/>
+       <h3>Drug Inventory</h3>
+            <br/>
+              <button (click)="onDrugInventory()" class="btn-primary btn">Find Inventory</button>
+              <br/><br/>
+              <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Drug Name</th>
+                      <th scope="col">Inventory</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                  <div *ngFor="let drug of drugInventory; let i = index" [attr.data-index]="i">
+                    <tr>
+                      <th scope="row">{{ i }}</th>
+                      <td>{{ drug.drugName }}</td>
+                      <td>{{ drug.inventoryOnHand }}</td>
+                    </tr>
+                  </div>
+                  </tbody>
+                </table>
+      </div>
+      
+      <br>
+      <!-- Doctor Performance -->
+      <div *ngIf="isVisible[6]">
+        <br/><br><br>
+        <form (ngSubmit)="onDoctorPerformance(f)" #f="ngForm" class="form-border">
+            <h3>Doctor Performance</h3>
+            <br/>
+            <div class="form-group">
+              <!-- Drug Name -->
+              <label for="drugName">Please specify the minimum number of patients:</label>
+              <input type="number" class="form-control" id="patients" placeholder="No." required name="patientMinimum" ngModel #patientMinimum="ngModel"><br/>
+              <!-- Submit Button -->
+              <button type="submit" class="btn-primary btn"  [disabled]="!f.valid">Find Records</button>
+              <br/>
+            </div>
+        </form>
+            <!-- Display the Doctor Performance records -->
+            <br/><br/>
+            <h4>Doctor Records</h4>
+            <br/>
+              <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">First Name</th>
+                      <th scope="col">Last Name</th>
+                      <th scope="col">Patients</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    <div *ngFor="let doctor of doctorPerformance ; let i = index" [attr.data-index]="i">
+                      <tr>
+                        <th scope="row">{{ i }}</th>
+                        <td>{{ doctor.fName }}</td>
+                        <td>{{ doctor.lName }}</td>
+                        <td>{{ doctor.patients }}</td>
+                      </tr>
+                    </div>
+                  </tbody>
+                </table>
+
+    </div>
+  </div>
+</div>
